@@ -73,21 +73,13 @@ public class PersonServiceImpl implements PersonService {
     @Override
     @Transactional
     public void addDeveloper(PersonDto personDto) {
-        byte[] profilePictureBytes = null;
-        if (personDto.getProfilePicture() != null) {
-            try {
-                profilePictureBytes = personDto.getProfilePicture().getBytes();
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to read profile picture", e);
-            }
-        }
 
         Person person = new Person();
         person.setName(personDto.getName());
         person.setSurname(personDto.getSurname());
         person.setRole(GlobalConstants.DEVELOPER);
         person.setEmail(personDto.getEmail());
-        person.setProfilePicture(profilePictureBytes);
+        person.setProfilePicture(personDto.getBase64ProfilePicture());
         personRepository.save(person);
 
         processSkillsAndExperience(person.getPersonId(), personDto.getSkills(), personDto.getExperience());

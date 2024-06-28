@@ -64,9 +64,8 @@ public class Person {
         private String email;
 
 
-        @Lob
         @Column(name = "profilePicture")
-        private byte[] profilePicture;
+        private String profilePicture;
 }
 
 
