@@ -27,9 +27,6 @@ public class Person {
     @Column(name = "Email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "Password", nullable = false)
-    private String password;
-
     @Column(name = "profilePicture")
     private String profilePicture;
 
