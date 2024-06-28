@@ -13,30 +13,6 @@ import java.util.*;
 @Data
 public class Person {
 
-/*
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PersonId")
-    private Long personId;
-
-    @Column(name = "Name", nullable = false)
-    private String name;
-
-    @Column(name = "Surname", nullable = false)
-    private String surname;
-
-    @Column(name = "Role", nullable = false)
-    private String role;
-
-    @Column(name = "Email", nullable = false, unique = true)
-    private String email;
-
-    @Column(name = "profilePicture")
-    private String profilePicture;
-
- */
-
-
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "PersonId")
@@ -62,7 +38,6 @@ public class Person {
         @Size(max = 100)
         @Column(name = "Email")
         private String email;
-
 
         @Column(name = "profilePicture")
         private String profilePicture;

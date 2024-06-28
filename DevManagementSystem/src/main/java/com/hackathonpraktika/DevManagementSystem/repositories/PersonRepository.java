@@ -17,4 +17,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     @Query(value = "SELECT p.* FROM Person p JOIN DevSkillExp dse ON p.PersonId = dse.PersonId WHERE dse.YearOfExp >= :years", nativeQuery = true)
     List<Person> findByExperience(@Param("years") int years);
+
+    @Query(value = "SELECT p.* FROM Person p JOIN PersonProject pp ON p.PersonId = pp.PersonId WHERE pp.ProjectId = :projectId", nativeQuery = true)
+    List<Person> findAllDevelopersByProjectIdNativeQuery(@Param("projectId") Long projectId);
 }
