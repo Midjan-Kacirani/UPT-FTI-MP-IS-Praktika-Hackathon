@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DevSkillRepository extends JpaRepository<DevSkill, Long> {
 
-    @Query(value = "SELECT * FROM DevSkill WHERE LOWER(SkillName) = LOWER(:skillName)", nativeQuery = true)
+    @Query(value = "SELECT * FROM dev_skill WHERE LOWER(skill_name) = LOWER(:skillName)", nativeQuery = true)
     DevSkill findBySkillNameIgnoreCase(@Param("skillName") String skillName);
 }

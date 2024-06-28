@@ -3,7 +3,9 @@ package com.hackathonpraktika.DevManagementSystem.services;
 import com.hackathonpraktika.DevManagementSystem.repositories.PersonRepository;
 import com.hackathonpraktika.DevManagementSystem.repositories.ProjectsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ProjectServiceImpl implements ProjectService{
     @Autowired
     private ProjectsRepository projectsRepository;

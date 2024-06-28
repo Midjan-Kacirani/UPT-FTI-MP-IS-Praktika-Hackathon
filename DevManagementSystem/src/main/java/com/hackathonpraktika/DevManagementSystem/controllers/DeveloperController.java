@@ -10,19 +10,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/developers")
+@RestController
+@RequestMapping("/developers")
 public class DeveloperController {
     @Autowired
     private PersonService personService;
 
     @PostMapping("/addDeveloper")
-    public ResponseEntity<String> addDeveloper(@Valid @ModelAttribute PersonDto personDto) {
+    public ResponseEntity<String> addDeveloper(@Valid @RequestBody PersonDto personDto) {
         personService.addDeveloper(personDto);
         return ResponseEntity.ok("Developer profile added successfully");
     }
 
     @PutMapping("/updateDeveloper/{id}")
-    public ResponseEntity<String> updateDeveloper(@PathVariable Long id, @Valid @ModelAttribute PersonDto personDto) {
+    public ResponseEntity<String> updateDeveloper(@PathVariable Long id, @Valid @RequestBody PersonDto personDto) {
         personService.updateDeveloper(id, personDto);
         return ResponseEntity.ok("Developer profile updated successfully");
     }
@@ -43,6 +44,12 @@ public class DeveloperController {
         } else {
             return personService.getAllPersons();
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePerson(@PathVariable Long id){
+        personService.deletePerson(id);
+        return ResponseEntity.ok("Deleted successfully!");
     }
 }
 

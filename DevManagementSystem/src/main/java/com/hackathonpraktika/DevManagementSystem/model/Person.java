@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import java.util.*;
 
 
 @Entity
@@ -43,29 +44,25 @@ public class Person {
 
         @NotBlank
         @Size(max = 100)
-        @Column(name = "Name", nullable = false)
+        @Column(name = "Name")
         private String name;
 
         @NotBlank
         @Size(max = 100)
-        @Column(name = "Surname", nullable = false)
+        @Column(name = "Surname")
         private String surname;
 
         @NotBlank
         @Size(max = 50)
-        @Column(name = "Role", nullable = false)
+        @Column(name = "Role")
         private String role;
 
         @NotBlank
         @Email
         @Size(max = 100)
-        @Column(name = "Email", nullable = false, unique = true)
+        @Column(name = "Email")
         private String email;
 
-        @NotBlank
-        @Size(max = 255)
-        @Column(name = "Password", nullable = false)
-        private String password;
 
         @Lob
         @Column(name = "profilePicture")

@@ -7,6 +7,8 @@ import com.hackathonpraktika.DevManagementSystem.model.Person;
 import com.hackathonpraktika.DevManagementSystem.repositories.DevSkillExpRepository;
 import com.hackathonpraktika.DevManagementSystem.repositories.DevSkillRepository;
 import com.hackathonpraktika.DevManagementSystem.repositories.PersonRepository;
+import com.hackathonpraktika.DevManagementSystem.utilities.GlobalConstants;
+import com.hackathonpraktika.DevManagementSystem.utilities.RolesConstants;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -83,9 +85,8 @@ public class PersonServiceImpl implements PersonService {
         Person person = new Person();
         person.setName(personDto.getName());
         person.setSurname(personDto.getSurname());
-        person.setRole(personDto.getRole());
+        person.setRole(GlobalConstants.DEVELOPER);
         person.setEmail(personDto.getEmail());
-        person.setPassword(personDto.getPassword());
         person.setProfilePicture(profilePictureBytes);
         personRepository.save(person);
 
@@ -99,16 +100,14 @@ public class PersonServiceImpl implements PersonService {
 
         person.setName(personDto.getName());
         person.setSurname(personDto.getSurname());
-        person.setRole(personDto.getRole());
         person.setEmail(personDto.getEmail());
-        person.setPassword(personDto.getPassword());
-        if (personDto.getProfilePicture() != null) {
-            try {
-                person.setProfilePicture(personDto.getProfilePicture().getBytes());
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to read profile picture", e);
-            }
-        }
+//        if (personDto.getProfilePicture() != null) {
+//            try {
+//                person.setProfilePicture(personDto.getProfilePicture().getBytes());
+//            } catch (IOException e) {
+//                throw new RuntimeException("Failed to read profile picture", e);
+//            }
+//        }
         personRepository.save(person);
 
         // Delete existing skills and add new ones
@@ -117,26 +116,29 @@ public class PersonServiceImpl implements PersonService {
     }
 
     private void processSkillsAndExperience(Long personId, String skills, Integer experience) {
-        String[] skillArray = skills.split(",");
-        for (String skill : skillArray) {
-            String trimmedSkill = skill.trim();
-            DevSkill devSkill = devSkillRepository.findBySkillNameIgnoreCase(trimmedSkill);
-            if (devSkill == null) {
-                devSkill = new DevSkill();
-                devSkill.setSkillName(trimmedSkill);
-                devSkillRepository.save(devSkill);
-            }
+        if(skills != null){
+            String[] skillArray = skills.split(",");
+            for (String skill : skillArray) {
+                String trimmedSkill = skill.trim();
+                DevSkill devSkill = devSkillRepository.findBySkillNameIgnoreCase(trimmedSkill);
+                if (devSkill == null) {
+                    devSkill = new DevSkill();
+                    devSkill.setSkillName(trimmedSkill);
+                    devSkillRepository.save(devSkill);
+                }
 
-            DevSkillExp devSkillExp = new DevSkillExp();
-            devSkillExp.setPersonId(personId);
-            devSkillExp.setDevSkillId(devSkill.getDevSkillId());
-            devSkillExp.setYearOfExp(experience);
-            devSkillExpRepository.save(devSkillExp);
+                DevSkillExp devSkillExp = new DevSkillExp();
+                devSkillExp.setPersonId(personId);
+                devSkillExp.setDevSkillId(devSkill.getDevSkillId());
+                devSkillExp.setYearOfExp(experience);
+                devSkillExpRepository.save(devSkillExp);
+        }
         }
     }
     @Override
     public void deletePerson(Long personId){
         if(personRepository.existsById(personId)){
+            devSkillExpRepository.deleteByPersonId(personId);
             personRepository.deleteById(personId);
         }else{
             throw new RuntimeException("Person not found with id: " + personId );
