@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface PersonService{
-
+    List<Person> getAllPersons();
     List<Person> searchPersonsByName(String name);
     List<Person> searchPersonsBySkill(String skillName);
     List<Person> searchPersonsByExperience(int experience);
