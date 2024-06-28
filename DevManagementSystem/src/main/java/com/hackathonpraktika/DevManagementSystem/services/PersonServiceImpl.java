@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PersonServiceImpl implements PersonService{
+public class PersonServiceImpl implements PersonService {
     @Autowired
     private PersonRepository personRepository;
 
@@ -40,12 +40,19 @@ public class PersonServiceImpl implements PersonService{
     public List<Person> searchPersonsByExperience(int experience) {
         return personRepository.findByExperience(experience);
     }
-
     @Override
     public List<Person> searchPersonsBySkillAndExperience(String skillName, int experience) {
         List<DevSkillExp> devSkillExps = devSkillExpRepository.findBySkillAndExperience(skillName, experience);
         return devSkillExps.stream()
                 .map(DevSkillExp::getPerson)
                 .collect(Collectors.toList());
+    }
+    @Override
+    public void deletePerson(Long personId){
+        if(personRepository.existsById(personId)){
+            personRepository.deleteById(personId);
+        }else{
+            throw new RuntimeException("Person not found with id: " + personId );
+        }
     }
 }

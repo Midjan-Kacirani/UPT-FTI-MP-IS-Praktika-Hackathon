@@ -28,7 +28,6 @@ public class DevSkillExp {
     @JoinColumn(name = "DevSkillId", insertable = false, updatable = false)
     private DevSkill devSkill;
 
-    // Getters and setters
-    // ...
+
 
 }
