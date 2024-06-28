@@ -19,5 +19,4 @@ public class DevSkill {
     @Column(name = "SkillDescription")
     private String skillDescription;
 
-
 }

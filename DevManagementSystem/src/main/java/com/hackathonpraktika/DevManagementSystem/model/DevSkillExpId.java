@@ -15,7 +15,6 @@ public class DevSkillExpId implements Serializable {
         DevSkillExpId that = (DevSkillExpId) o;
         return Objects.equals(personId, that.personId) && Objects.equals(devSkillId, that.devSkillId);
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(personId, devSkillId);
