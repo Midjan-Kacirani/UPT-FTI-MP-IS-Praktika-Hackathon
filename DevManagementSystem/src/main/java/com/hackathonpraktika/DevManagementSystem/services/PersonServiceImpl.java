@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class PersonServiceImpl implements PersonService{
+public class PersonServiceImpl implements PersonService {
     @Autowired
     private PersonRepository personRepository;
 
@@ -57,7 +57,6 @@ public class PersonServiceImpl implements PersonService{
     public List<Person> searchPersonsByExperience(int experience) {
         return personRepository.findByExperience(experience);
     }
-
     @Override
     public List<Person> searchPersonsBySkillAndExperience(String skillName, int experience) {
         List<DevSkillExp> devSkillExps = devSkillExpRepository.findBySkillAndExperience(skillName, experience);
@@ -65,9 +64,6 @@ public class PersonServiceImpl implements PersonService{
                 .map(DevSkillExp::getPerson)
                 .collect(Collectors.toList());
     }
-
-
-
     @Override
     @Transactional
     public void addDeveloper(PersonDto personDto) {
@@ -134,7 +130,14 @@ public class PersonServiceImpl implements PersonService{
             devSkillExpRepository.save(devSkillExp);
         }
     }
-
+    @Override
+    public void deletePerson(Long personId){
+        if(personRepository.existsById(personId)){
+            personRepository.deleteById(personId);
+        }else{
+            throw new RuntimeException("Person not found with id: " + personId );
+        }
+    }
 }
 
 
