@@ -1,5 +1,6 @@
 package com.hackathonpraktika.DevManagementSystem.services;
 
+import com.hackathonpraktika.DevManagementSystem.dto.DevSkillExpDTO;
 import com.hackathonpraktika.DevManagementSystem.dto.PersonDto;
 import com.hackathonpraktika.DevManagementSystem.model.DevSkill;
 import com.hackathonpraktika.DevManagementSystem.model.DevSkillExp;
@@ -8,7 +9,6 @@ import com.hackathonpraktika.DevManagementSystem.repositories.DevSkillExpReposit
 import com.hackathonpraktika.DevManagementSystem.repositories.DevSkillRepository;
 import com.hackathonpraktika.DevManagementSystem.repositories.PersonRepository;
 import com.hackathonpraktika.DevManagementSystem.utilities.GlobalConstants;
-import com.hackathonpraktika.DevManagementSystem.utilities.RolesConstants;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -82,7 +82,7 @@ public class PersonServiceImpl implements PersonService {
         person.setProfilePicture(personDto.getBase64ProfilePicture());
         personRepository.save(person);
 
-        processSkillsAndExperience(person.getPersonId(), personDto.getSkills(), personDto.getExperience());
+        processSkillsAndExperience(person.getPersonId(), personDto.getDevSkillExpList());
     }
 
     @Override
@@ -93,38 +93,31 @@ public class PersonServiceImpl implements PersonService {
         person.setName(personDto.getName());
         person.setSurname(personDto.getSurname());
         person.setEmail(personDto.getEmail());
-//        if (personDto.getProfilePicture() != null) {
-//            try {
-//                person.setProfilePicture(personDto.getProfilePicture().getBytes());
-//            } catch (IOException e) {
-//                throw new RuntimeException("Failed to read profile picture", e);
-//            }
-//        }
+        person.setProfilePicture(personDto.getBase64ProfilePicture());
         personRepository.save(person);
 
-        // Delete existing skills and add new ones
-        //devSkillExpRepository.deleteByPersonId(person.getPersonId());
-        processSkillsAndExperience(person.getPersonId(), personDto.getSkills(), personDto.getExperience());
+        processSkillsAndExperience(person.getPersonId(), personDto.getDevSkillExpList());
     }
 
-    private void processSkillsAndExperience(Long personId, String skills, Integer experience) {
-        if(skills != null){
-            String[] skillArray = skills.split(",");
-            for (String skill : skillArray) {
-                String trimmedSkill = skill.trim();
-                DevSkill devSkill = devSkillRepository.findBySkillNameIgnoreCase(trimmedSkill);
+    private void processSkillsAndExperience(Long personId, List<DevSkillExpDTO> devSkillExpList) {
+        if (devSkillExpList != null) {
+            for (DevSkillExpDTO devSkillExp : devSkillExpList) {
+                String skillName = devSkillExp.getSkill();
+                Integer experience = devSkillExp.getExperience();
+
+                DevSkill devSkill = devSkillRepository.findBySkillNameIgnoreCase(skillName);
                 if (devSkill == null) {
                     devSkill = new DevSkill();
-                    devSkill.setSkillName(trimmedSkill);
+                    devSkill.setSkillName(skillName);
                     devSkillRepository.save(devSkill);
                 }
 
-                DevSkillExp devSkillExp = new DevSkillExp();
-                devSkillExp.setPersonId(personId);
-                devSkillExp.setDevSkillId(devSkill.getDevSkillId());
-                devSkillExp.setYearOfExp(experience);
-                devSkillExpRepository.save(devSkillExp);
-        }
+                DevSkillExp devSkillExpItem = new DevSkillExp();
+                devSkillExpItem.setPersonId(personId);
+                devSkillExpItem.setDevSkillId(devSkill.getDevSkillId());
+                devSkillExpItem.setYearOfExp(experience);
+                devSkillExpRepository.save(devSkillExpItem);
+            }
         }
     }
     @Override
