@@ -25,10 +25,7 @@ public class DevSkillExp {
     private Person person;
 
     @ManyToOne
-    @JoinColumn(name = "DevSkillId", insertable = false, updatable = false)
+    @JoinColumn(name = "devSkillId", insertable = false, updatable = false)
     private DevSkill devSkill;
-
-    // Getters and setters
-    // ...
 
 }
