@@ -9,10 +9,9 @@ import java.util.List;
 @Service
 public interface PersonService{
 
-    //public List<Person> getPersonById(Long personId);
-
-    public void deletePerson(Long personId);
-
-
-
+    List<Person> searchPersonsByName(String name);
+    List<Person> searchPersonsBySkill(String skillName);
+    List<Person> searchPersonsByExperience(int experience);
+    List<Person> searchPersonsBySkillAndExperience(String skillName, int experience);
+    void deletePerson(Long personId);
 }
